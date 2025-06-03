@@ -251,8 +251,10 @@ trait CommonMtagsEnrichments {
       doc.endsWith(".sc")
     def isWorksheet: Boolean =
       doc.endsWith(".worksheet.sc")
+    def isTwirlTemplate: Boolean = doc.endsWith(".scala.html")
+    def isTwirlGeneratedFile: Boolean = doc.endsWith(".template.scala")
     def isScalaFilename: Boolean =
-      doc.isScala || isScalaScript || isSbt || isMill
+      doc.isScala || isScalaScript || isSbt || isMill || isTwirlTemplate
     def isScalaOrJavaFilename: Boolean =
       isScalaFilename || isJavaFilename
     def isJavaFilename: Boolean =

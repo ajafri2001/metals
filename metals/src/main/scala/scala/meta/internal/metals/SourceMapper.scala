@@ -29,6 +29,7 @@ final case class SourceMapper(
 
     def input = path.toInputFromBuffers(buffers)
     def default = {
+      pprint.log(buildTargets.allBuildTargetIds)
       val viaBuildTargets =
         buildTargets.mappedTo(path).map(_.update(input.value))
       viaBuildTargets.getOrElse(

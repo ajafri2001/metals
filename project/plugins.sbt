@@ -8,6 +8,8 @@ addSbtPlugin("com.github.reibitto" % "sbt-welcome" % "0.5.0")
 // Mima used for mtags-interfaces
 addSbtPlugin("com.typesafe" % "sbt-mima-plugin" % "1.1.4")
 
+addSbtPlugin("org.playframework.twirl" % "sbt-twirl" % "2.0.8")
+
 libraryDependencies += "org.scala-sbt" %% "scripted-plugin" % sbtVersion.value
 
 resolvers ++= Resolver.sonatypeOssRepos("public")

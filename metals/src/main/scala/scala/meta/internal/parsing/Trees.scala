@@ -213,6 +213,7 @@ final class Trees(
   ): Option[Parsed[Tree]] = {
     val possiblyParsed = for {
       text <- buffers.get(path).orElse(path.readTextOpt)
+      if !path.isTwirlTemplate
     } yield try {
       val skipFistShebang =
         if (text.startsWith("#!")) text.replaceFirst("#!", "//") else text
