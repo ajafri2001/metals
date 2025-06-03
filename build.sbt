@@ -491,6 +491,7 @@ lazy val metals = project
       "scalafmtVersion" -> V.scalafmt,
       "scalaCliVersion" -> V.scalaCli,
       "millVersion" -> V.mill,
+      "twirlVersion" -> V.twirl,
       "debugAdapterVersion" -> V.debugAdapter,
       "sbtJdiToolsVersion" -> V.sbtJdiTools,
       "supportedScalaVersions" -> V.supportedScalaVersions,
@@ -509,7 +510,7 @@ lazy val metals = project
     ),
   )
   .dependsOn(mtags, `mtags-java`)
-  .enablePlugins(BuildInfoPlugin)
+  .enablePlugins(BuildInfoPlugin, SbtTwirl)
 
 lazy val `sbt-metals` = project
   .settings(

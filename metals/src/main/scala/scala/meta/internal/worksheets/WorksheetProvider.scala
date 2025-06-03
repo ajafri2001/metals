@@ -593,6 +593,52 @@ object WorksheetProvider {
 
     }
   }
+
+  def twirlTemplateAdjustments(
+      originalInput: Input.VirtualFile
+  ): Option[(Input.VirtualFile, Position => Position, AdjustLspData)] = {
+    val ident = " "
+    val wrappedContent =
+      Seq(
+        "package html", "",
+        "import _root_.play.twirl.api.TwirlFeatureImports.*",
+        "import _root_.play.twirl.api.TwirlHelperImports.*",
+        "import scala.language.adhocExtensions",
+        "import _root_.play.twirl.api.Html",
+        "import _root_.play.twirl.api.JavaScript",
+        "import _root_.play.twirl.api.Txt", "import _root_.play.twirl.api.Xml",
+        "",
+        "object example extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template2[Int,Int,play.twirl.api.HtmlFormat.Appendable] {",
+        "", "  /**/",
+        "  def apply/*1.2*/(x: Int)(implicit y: Int):play.twirl.api.HtmlFormat.Appendable = {",
+        "    _display_ {", "      {", "", "",
+        "Seq[Any](format.raw/*2.1*/(\"\"\"",
+        "\"\"\"),format.raw/*3.1*/(\"\"\"<p>hello</p>", "", "\"\"\"))",
+        "      }", "    }", "  }", "",
+        "  def render(x:Int,y:Int): play.twirl.api.HtmlFormat.Appendable = apply(x)(using y)",
+        "",
+        "  def f:((Int) => (Int) => play.twirl.api.HtmlFormat.Appendable) = (x) => (y) => apply(x)(using y)",
+        "", "  def ref: this.type = this", "", "}", "", "", "              /*",
+        "                  -- GENERATED --",
+        "                  SOURCE: src/main/twirl/example.scala.html",
+        "                  HASH: f1bd6067c0a1e6580c6dd38e8c9b40f8db28745f",
+        "                  MATRIX: 601->1|720->27|747->28",
+        "                  LINES: 15->1|20->2|21->3",
+        "                  -- GENERATED --", "              */",
+      ).mkString("\n")
+    val modifiedInput = originalInput.copy(value = wrappedContent)
+
+    val adjustLspData = AdjustedLspData.create(
+      pos => new Position(pos.getLine() - 1, pos.getCharacter() - ident.size),
+      filterOutLocations = _ => true,
+    )
+
+    def adjustRequest(position: Position): Position =
+      new Position(position.getLine + 1, position.getCharacter + 2)
+
+    Some((modifiedInput, adjustRequest, adjustLspData))
+  }
+
 }
 
 case class WorksheetPcData(
